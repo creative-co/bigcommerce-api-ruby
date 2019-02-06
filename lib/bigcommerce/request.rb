@@ -82,10 +82,10 @@ module Bigcommerce
 
       def build_response_object(response)
         json = parse response.body
-        json = json[:data] if json[:data] # Response of V3 endpoints laid in "data" attribute
         if json.is_a? Array
           json.map { |obj| new obj }
         else
+          json = json[:data] if json.has_key?(:data) # Response of V3 endpoints laid in "data" attribute
           new json
         end
       end
