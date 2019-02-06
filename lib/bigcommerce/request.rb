@@ -65,13 +65,24 @@ module Bigcommerce
 
       def raw_request(method, path, params = {})
         client = params.delete(:connection) || Bigcommerce.api
-        client.send(method, path.to_s, params)
+        client.send(method, build_path(path, params), params)
       end
 
       private
 
+      def build_path(path, params = {})
+        query_params = params.delete(:query_params)
+        if query_params.present?
+          s = query_params.keys.map { |key| "#{key}=#{query_params.fetch(key)}" }.join('&')
+          "#{path}?#{s}"
+        else
+          path.to_s
+        end
+      end
+
       def build_response_object(response)
         json = parse response.body
+        json = json[:data] if json[:data] # Response of V3 endpoints laid in "data" attribute
         if json.is_a? Array
           json.map { |obj| new obj }
         else
