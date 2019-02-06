@@ -11,6 +11,7 @@ module Bigcommerce
     property :coupons
     property :products
     property :status_id
+    property :cart_id
     property :total_tax
     property :ip_address
     property :is_deleted
