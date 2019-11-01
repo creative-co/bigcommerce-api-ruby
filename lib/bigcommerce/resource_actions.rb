@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Bigcommerce
   class ResourceActions < Module
     attr_reader :options
@@ -25,12 +27,24 @@ module Bigcommerce
       end
 
       def fetch_all(params = {})
-        raise NotImplementedError, 'we meed to improve it'
-        get path.build, params
+        response = raw_request(:get, path.build, params.merge(limit: 250))
+        meta = JSON.parse(response.body, symbolize_names: true)[:meta]
+        result = build_response_object response
+
+        if meta[:pagination].present?
+          current_page = meta[:pagination][:current_page]
+          total_pages = meta[:pagination][:total_pages]
+          while current_page < total_pages
+            result += all(params.merge(page: current_page + 1))
+            current_page += 1
+          end
+        end
+        result
       end
 
       def find(resource_id, params = {})
         raise ArgumentError if resource_id.nil?
+
         get path.build(resource_id), params
       end
 
@@ -40,11 +54,13 @@ module Bigcommerce
 
       def update(resource_id, params = {})
         raise ArgumentError if resource_id.nil?
+
         put path.build(resource_id), params
       end
 
       def destroy(resource_id, params = {})
         raise ArgumentError if resource_id.nil?
+
         delete path.build(resource_id), params
       end
 

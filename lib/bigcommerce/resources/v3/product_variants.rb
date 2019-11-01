@@ -6,7 +6,7 @@
 
 module Bigcommerce
   module V3
-    class Product < Resource
+    class ProductVariants < Resource
       include Bigcommerce::ResourceActions.new uri: 'catalog/products/%s'
 
       property :id
@@ -81,6 +81,8 @@ module Bigcommerce
 
       property :images
       property :videos
+
+      # property :variations
     end
   end
 end

@@ -8,7 +8,21 @@ module Bigcommerce
     class Script < Resource
       include Bigcommerce::ResourceActions.new uri: 'content/scripts/%s'
 
-      property :data
+      property :uuid
+      property :name
+      property :description
+      property :html
+      property :src
+      property :auto_uninstall
+      property :load_method
+      property :location
+      property :visibility
+      property :kind
+      # property :src
+      # property :script_tag
+      property :api_client_id
+      property :date_created
+      property :date_modified
     end
   end
 end
