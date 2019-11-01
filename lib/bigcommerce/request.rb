@@ -86,7 +86,11 @@ module Bigcommerce
           json.map { |obj| new obj }
         else
           json = json[:data] if json.has_key?(:data) # Response of V3 endpoints laid in "data" attribute
-          new json
+          if json.is_a? Array
+            json.map { |obj| new obj }
+          else
+            new json
+          end
         end
       end
 

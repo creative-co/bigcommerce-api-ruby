@@ -24,6 +24,11 @@ module Bigcommerce
         get path.build, params
       end
 
+      def fetch_all(params = {})
+        raise NotImplementedError, 'we meed to improve it'
+        get path.build, params
+      end
+
       def find(resource_id, params = {})
         raise ArgumentError if resource_id.nil?
         get path.build(resource_id), params
