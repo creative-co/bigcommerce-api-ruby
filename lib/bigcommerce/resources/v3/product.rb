@@ -71,6 +71,7 @@ module Bigcommerce
       property :calculated_price
       property :reviews_rating_sum
       property :reviews_count
+      property :reviews
       property :total_sold
       property :custom_fields
       property :bulk_pricing_rules
