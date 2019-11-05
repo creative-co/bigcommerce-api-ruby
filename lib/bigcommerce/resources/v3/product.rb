@@ -3,12 +3,14 @@
 # Product
 # Catalog of saleable items in the store.
 # https://developer.bigcommerce.com/api/stores/v3/products
+require 'bigcommerce/resources/v3/product_variant.rb'
 
 module Bigcommerce
   module V3
     class Product < Resource
       include Bigcommerce::ResourceActions.new uri: 'catalog/products/%s'
-
+      include Hashie::Extensions::DeepLocate
+      # include Hashie::Extensions::DeepFetch
       property :id
       property :name
       property :type
@@ -77,7 +79,8 @@ module Bigcommerce
       property :bulk_pricing_rules
       property :date_created
       property :date_modified
-      property :variants
+
+      property :variants, coerce: Array[Bigcommerce::V3::ProductVariant]
       property :base_variant_id
 
       property :images
