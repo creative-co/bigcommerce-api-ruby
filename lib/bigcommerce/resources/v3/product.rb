@@ -10,6 +10,7 @@ module Bigcommerce
     class Product < Resource
       include Bigcommerce::ResourceActions.new uri: 'catalog/products/%s'
       include Hashie::Extensions::DeepLocate
+      include Hashie::Extensions::DeepFind
       # include Hashie::Extensions::DeepFetch
       property :id
       property :name

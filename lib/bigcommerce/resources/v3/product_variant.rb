@@ -8,6 +8,8 @@ module Bigcommerce
   module V3
     class ProductVariant < Resource
       include Bigcommerce::SubresourceActions.new(uri: 'catalog/products/%d/variants/%d')
+      include Hashie::Extensions::DeepLocate
+      include Hashie::Extensions::DeepFind
 
       property :id
       property :product_id
