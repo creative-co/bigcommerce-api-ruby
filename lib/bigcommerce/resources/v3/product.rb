@@ -76,7 +76,7 @@ module Bigcommerce
       property :reviews_count
       property :reviews
       property :total_sold
-      property :custom_fields
+      property :custom_fields, coerce: Array[Bigcommerce::V3::CustomField]
       property :bulk_pricing_rules
       property :date_created
       property :date_modified
