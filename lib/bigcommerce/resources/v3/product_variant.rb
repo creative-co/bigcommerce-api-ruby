@@ -3,6 +3,7 @@
 # Product
 # Catalog of saleable items in the store.
 # https://developer.bigcommerce.com/api/stores/v3/products
+require 'bigcommerce/resources/v3/option_value.rb'
 
 module Bigcommerce
   module V3
