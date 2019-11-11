@@ -35,6 +35,7 @@ module Bigcommerce
     property :billing_address
     property :coupon_discount
     property :discount_amount
+    property :external_id
     property :external_source
     property :is_email_opt_in
     property :refunded_amount

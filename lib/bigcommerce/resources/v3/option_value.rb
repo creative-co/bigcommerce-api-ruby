@@ -16,6 +16,8 @@ module Bigcommerce
       property :label
       property :sort_order
       property :value_data
+      property :option_id
+      property :option_display_name
     end
   end
 end
