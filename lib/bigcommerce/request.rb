@@ -65,7 +65,9 @@ module Bigcommerce
 
       def raw_request(method, path, params = {})
         client = params.delete(:connection) || Bigcommerce.api
-        client.send(method, build_path(path, params), params)
+        data = params
+        data = params[:request_data] if params.has_key?(:request_data)
+        client.send(method, build_path(path, data), data)
       end
 
       private
@@ -81,6 +83,16 @@ module Bigcommerce
       end
 
       def build_response_object(response)
+        unless response.success?
+          if response.body
+            body = parse response.body
+            errors = body[:title]
+            errors = body[:errors] unless body[:errors].blank?
+            raise StandardError.new(errors)
+          else
+            raise StandardError.new(response.status)
+          end
+        end
         json = parse response.body
         if json.is_a? Array
           json.map { |obj| new obj }

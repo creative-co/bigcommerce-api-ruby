@@ -58,6 +58,12 @@ module Bigcommerce
         put path.build(resource_id), params
       end
 
+      def update_batch(params = {})
+        # raise ArgumentError if resource_id.nil?
+
+        put path.build, params
+      end
+
       def destroy(resource_id, params = {})
         raise ArgumentError if resource_id.nil?
 
