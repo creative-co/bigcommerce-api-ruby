@@ -23,7 +23,7 @@ module Bigcommerce
           current_page = meta[:pagination][:current_page]
           total_pages = meta[:pagination][:total_pages]
           while current_page < total_pages
-            result += all(parent_id, params.merge(page: current_page + 1))
+            result += all(parent_id, params.merge(page: current_page + 1, limit: 250))
             current_page += 1
           end
         end
