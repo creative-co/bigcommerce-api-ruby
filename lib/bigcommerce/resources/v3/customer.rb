@@ -3,7 +3,7 @@
 # Product
 # Catalog of saleable items in the store.
 # https://developer.bigcommerce.com/api/stores/v3/products
-require 'bigcommerce/resources/v3/option_value.rb'
+require 'bigcommerce/resources/v3/customer_address.rb'
 
 module Bigcommerce
   module V3
@@ -29,7 +29,7 @@ module Bigcommerce
       property :address_count
       property :attribute_count
       property :authentication
-      property :addresses
+      property :addresses, coerce: Array[Bigcommerce::V3::CustomerAddress]
       property :attributes
       property :form_fields
       property :store_credit_amounts
