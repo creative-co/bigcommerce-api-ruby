@@ -4,7 +4,6 @@
 # Catalog of saleable items in the store.
 # https://developer.bigcommerce.com/api/stores/v3/products
 require 'bigcommerce/resources/v3/customer_address.rb'
-require 'bigcommerce/resources/v3/customer_attributes.rb'
 
 module Bigcommerce
   module V3
