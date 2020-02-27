@@ -4,14 +4,14 @@
 # Catalog of saleable items in the store.
 # https://developer.bigcommerce.com/api/stores/v3/products
 
-require 'bigcommerce/resources/v3/customer_address.rb'
+require 'bigcommerce/resources/v3/checkout_billing_address.rb'
 module Bigcommerce
   module V3
     class Consignment < Resource
       include Bigcommerce::SubresourceActions.new uri: 'checkouts/%s/consignments/%s'
 
       property :id
-      property :shipping_address, coerce: Bigcommerce::V3::CustomerAddress
+      property :shipping_address, coerce: Bigcommerce::V3::CheckoutBillingAddress
       property :available_shipping_options, coerce: Array
       property :selected_shipping_option
 
