@@ -39,6 +39,7 @@ module Bigcommerce
     property :handling_cost_inc_tax
     property :handling_cost_tax_class_id
     property :count
+    property :form_fields
 
     def self.count(order_id, params = {})
       get "orders/#{order_id}/shipping_addresses/count", params
