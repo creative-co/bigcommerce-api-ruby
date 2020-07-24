@@ -87,6 +87,8 @@ module Bigcommerce
 
       property :images
       property :videos
+
+      property :primary_image
     end
   end
 end
