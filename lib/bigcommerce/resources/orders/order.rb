@@ -12,6 +12,7 @@ module Bigcommerce
     property :products
     property :status_id
     property :cart_id
+    property :channel_id
     property :total_tax
     property :ip_address
     property :is_deleted
