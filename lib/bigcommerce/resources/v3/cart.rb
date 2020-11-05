@@ -16,6 +16,7 @@ module Bigcommerce
       property :created_time
       property :updated_time
       property :redirect_urls
+      property :channel_id
     end
   end
 end
