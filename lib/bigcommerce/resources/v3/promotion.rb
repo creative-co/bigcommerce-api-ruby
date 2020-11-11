@@ -24,6 +24,8 @@ module Bigcommerce
       property :notifications, coerce: Array[Bigcommerce::V3::Promotions::Notification]
       property :shipping_address, coerce: Bigcommerce::V3::Promotions::ShippingAddress
       property :schedule
+
+      property :created_from
     end
   end
 end
