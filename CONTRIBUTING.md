@@ -46,6 +46,12 @@ Try to write a test that reproduces the problem you're trying to fix or describe
 
 We definitely appreciate pull requests that highlight or reproduce a problem, even without a fix.
 
+#### Running Tests
+
+```bash
+bundle exec rspec spec/
+```
+
 #### Write Code
 
 Implement your feature or bug fix.

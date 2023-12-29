@@ -20,7 +20,7 @@ module Bigcommerce
         conn.use Bigcommerce::Middleware::HttpException
         conn.use FaradayMiddleware::Gzip
         conn.adapter Faraday.default_adapter
-        if config.logger.present?
+        if config.logger
           conn.response :logger, config.logger, { headers: true, bodies: true }
         end
       end

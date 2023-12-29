@@ -27,15 +27,18 @@ module Bigcommerce
       end
 
       def fetch_all(params = {})
-        response = raw_request(:get, path.build, params.merge(limit: 250))
+        default_params = { limit: 250 }
+        params = default_params.merge params.dup
+
+        response = raw_request(:get, path.build, params)
         meta = JSON.parse(response.body, symbolize_names: true)[:meta]
         result = build_response_object response
 
-        if meta[:pagination].present?
+        unless meta[:pagination].nil?
           current_page = meta[:pagination][:current_page]
           total_pages = meta[:pagination][:total_pages]
           while current_page < total_pages
-            result += all(params.merge(page: current_page + 1, limit: 250))
+            result += all(params.merge(page: current_page + 1))
             current_page += 1
           end
         end

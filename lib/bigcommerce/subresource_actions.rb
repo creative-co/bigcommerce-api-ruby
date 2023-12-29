@@ -16,14 +16,19 @@ module Bigcommerce
 
       def fetch_all(parent_id, params = {})
         raise ArgumentError if parent_id.nil?
-        response = raw_request(:get, path.build(parent_id), params.merge(limit: 250))
+
+        default_params = { limit: 250 }
+        params = default_params.merge params.dup
+
+        response = raw_request(:get, path.build(parent_id), params)
         meta = JSON.parse(response.body, symbolize_names: true)[:meta]
         result = build_response_object response
-        if meta[:pagination].present?
+
+        unless meta[:pagination].nil?
           current_page = meta[:pagination][:current_page]
           total_pages = meta[:pagination][:total_pages]
           while current_page < total_pages
-            result += all(parent_id, params.merge(page: current_page + 1, limit: 250))
+            result += all(parent_id, params.merge(page: current_page + 1))
             current_page += 1
           end
         end
