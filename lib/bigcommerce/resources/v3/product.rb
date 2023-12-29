@@ -5,6 +5,8 @@
 # https://developer.bigcommerce.com/api/stores/v3/products
 require 'bigcommerce/resources/v3/product_variant.rb'
 require 'bigcommerce/resources/v3/custom_field.rb'
+require 'bigcommerce/resources/v3/product_option.rb'
+require 'bigcommerce/resources/v3/product_modifier.rb'
 
 module Bigcommerce
   module V3
@@ -87,6 +89,9 @@ module Bigcommerce
 
       property :images
       property :videos
+
+      property :options, coerce: Array[Bigcommerce::V3::ProductOption]
+      property :modifiers, coerce: Array[Bigcommerce::V3::ProductModifier]
 
       property :primary_image
     end
