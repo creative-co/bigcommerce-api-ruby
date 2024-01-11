@@ -56,6 +56,24 @@ RSpec.describe Bigcommerce::ResourceActions do
       expect(@klass).to receive(:raw_request).exactly(2).times
       @klass.fetch_all({})
     end
+
+    it 'should respect block' do
+      response = ->(page) {
+        res = OpenStruct.new(success?: true)
+        res.body = {
+          meta: {
+            pagination: {
+              current_page: page,
+              total_pages: 2
+            }
+          },
+          data: []
+        }.to_json
+        res
+      }
+      allow(@klass).to receive(:raw_request).and_return(response.call(1), response.call(2))
+      expect { |b| @klass.fetch_all({}, &b) }.to yield_successive_args([[], 1, 2], [[], 2, 2])
+    end
   end
 
   describe '.find' do
@@ -151,6 +169,24 @@ describe Bigcommerce::SubresourceActions do
       allow(@klass).to receive(:raw_request).and_return(response.call(1), response.call(2))
       expect(@klass).to receive(:raw_request).exactly(2).times
       @klass.fetch_all(1, {})
+    end
+
+    it 'should respect block' do
+      response = ->(page) {
+        res = OpenStruct.new(success?: true)
+        res.body = {
+          meta: {
+            pagination: {
+              current_page: page,
+              total_pages: 2
+            }
+          },
+          data: []
+        }.to_json
+        res
+      }
+      allow(@klass).to receive(:raw_request).and_return(response.call(1), response.call(2))
+      expect { |b| @klass.fetch_all(1, {}, &b) }.to yield_successive_args([[], 1, 2], [[], 2, 2])
     end
   end
 

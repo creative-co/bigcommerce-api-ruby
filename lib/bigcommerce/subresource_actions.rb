@@ -14,7 +14,7 @@ module Bigcommerce
         get path.build(parent_id), params
       end
 
-      def fetch_all(parent_id, params = {})
+      def fetch_all(parent_id, params = {}, &block)
         raise ArgumentError if parent_id.nil?
 
         default_params = { limit: 250 }
@@ -24,13 +24,18 @@ module Bigcommerce
         meta = JSON.parse(response.body, symbolize_names: true)[:meta]
         result = build_response_object response
 
-        unless meta[:pagination].nil?
+        if meta[:pagination]
           current_page = meta[:pagination][:current_page]
           total_pages = meta[:pagination][:total_pages]
+          block.call(result, current_page, total_pages) if block_given?
           while current_page < total_pages
-            result += all(parent_id, params.merge(page: current_page + 1))
             current_page += 1
+            page_result = all(parent_id, params.merge(page: current_page))
+            block.call(page_result, current_page, total_pages) if block_given?
+            result += page_result
           end
+        else
+          block.call(result, 1, 1) if block_given?
         end
         result
       end
