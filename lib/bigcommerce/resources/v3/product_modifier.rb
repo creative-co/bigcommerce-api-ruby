@@ -10,7 +10,7 @@ module Bigcommerce
       include Hashie::Extensions::DeepFind
 
       property :id
-      property :project_id
+      property :product_id
       property :name
       property :display_name
       property :type
