@@ -74,7 +74,7 @@ module Bigcommerce
 
       def build_path(path, params = {})
         query_params = params.delete(:query_params)
-        if query_params.present?
+        if query_params
           s = query_params.keys.map { |key| "#{key}=#{query_params.fetch(key)}" }.join('&')
           "#{path}?#{s}"
         else
@@ -87,7 +87,7 @@ module Bigcommerce
           if response.body
             body = parse response.body
             errors = body[:title]
-            errors = body[:errors] unless body[:errors].blank?
+            errors = body[:errors] if body[:errors]
             raise StandardError.new(errors)
           else
             raise StandardError.new(response.status)

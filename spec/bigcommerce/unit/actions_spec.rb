@@ -26,7 +26,7 @@ RSpec.describe Bigcommerce::ResourceActions do
 
   describe '.all' do
     it 'should make a get request to the correct route with query params' do
-      expect(@klass).to receive(:get).with('http://foo.bar', page: 1)
+      expect(@klass).to receive(:get).with('http://foo.bar', { page: 1 })
       @klass.all(params)
     end
 
@@ -34,6 +34,45 @@ RSpec.describe Bigcommerce::ResourceActions do
       expect(@klass).to receive(:get).with('http://foo.bar', {})
       params.delete(:params)
       @klass.all
+    end
+  end
+
+  describe '.fetch_all' do
+    it 'should respect pagination in the response' do
+      response = ->(page) {
+        res = OpenStruct.new(success?: true)
+        res.body = {
+          meta: {
+            pagination: {
+              current_page: page,
+              total_pages: 2
+            }
+          },
+          data: []
+        }.to_json
+        res
+      }
+      allow(@klass).to receive(:raw_request).and_return(response.call(1), response.call(2))
+      expect(@klass).to receive(:raw_request).exactly(2).times
+      @klass.fetch_all({})
+    end
+
+    it 'should respect block' do
+      response = ->(page) {
+        res = OpenStruct.new(success?: true)
+        res.body = {
+          meta: {
+            pagination: {
+              current_page: page,
+              total_pages: 2
+            }
+          },
+          data: []
+        }.to_json
+        res
+      }
+      allow(@klass).to receive(:raw_request).and_return(response.call(1), response.call(2))
+      expect { |b| @klass.fetch_all({}, &b) }.to yield_successive_args([[], 1, 2], [[], 2, 2])
     end
   end
 
@@ -46,14 +85,14 @@ RSpec.describe Bigcommerce::ResourceActions do
 
   describe '.create' do
     it 'should make a post request to the correct route with params' do
-      expect(@klass).to receive(:post).with('http://foo.bar', page: 1)
+      expect(@klass).to receive(:post).with('http://foo.bar', { page: 1 })
       @klass.create(params)
     end
   end
 
   describe '.update' do
     it 'should make a put request to the correct route with params' do
-      expect(@klass).to receive(:put).with('http://foo.bar/1', page: 1)
+      expect(@klass).to receive(:put).with('http://foo.bar/1', { page: 1 })
       @klass.update(1, params)
     end
   end
@@ -101,7 +140,7 @@ describe Bigcommerce::SubresourceActions do
 
   describe '.all' do
     it 'should make a get request to the correct route with query params' do
-      expect(@klass).to receive(:get).with('http://foo.bar/1', page: 1)
+      expect(@klass).to receive(:get).with('http://foo.bar/1', { page: 1 })
       @klass.all(1, params)
     end
 
@@ -109,6 +148,45 @@ describe Bigcommerce::SubresourceActions do
       expect(@klass).to receive(:get).with('http://foo.bar/1', {})
       params.delete(:params)
       @klass.all(1)
+    end
+  end
+
+  describe '.fetch_all' do
+    it 'should respect pagination in the response' do
+      response = ->(page) {
+        res = OpenStruct.new(success?: true)
+        res.body = {
+          meta: {
+            pagination: {
+              current_page: page,
+              total_pages: 2
+            }
+          },
+          data: []
+        }.to_json
+        res
+      }
+      allow(@klass).to receive(:raw_request).and_return(response.call(1), response.call(2))
+      expect(@klass).to receive(:raw_request).exactly(2).times
+      @klass.fetch_all(1, {})
+    end
+
+    it 'should respect block' do
+      response = ->(page) {
+        res = OpenStruct.new(success?: true)
+        res.body = {
+          meta: {
+            pagination: {
+              current_page: page,
+              total_pages: 2
+            }
+          },
+          data: []
+        }.to_json
+        res
+      }
+      allow(@klass).to receive(:raw_request).and_return(response.call(1), response.call(2))
+      expect { |b| @klass.fetch_all(1, {}, &b) }.to yield_successive_args([[], 1, 2], [[], 2, 2])
     end
   end
 
@@ -121,14 +199,14 @@ describe Bigcommerce::SubresourceActions do
 
   describe '.create' do
     it 'should make a post request to the correct route with params' do
-      expect(@klass).to receive(:post).with('http://foo.bar/1', page: 1)
+      expect(@klass).to receive(:post).with('http://foo.bar/1', { page: 1 })
       @klass.create(1, params)
     end
   end
 
   describe '.update' do
     it 'should make a put request to the correct route with params' do
-      expect(@klass).to receive(:put).with('http://foo.bar/1/2', page: 1)
+      expect(@klass).to receive(:put).with('http://foo.bar/1/2', { page: 1 })
       @klass.update(1, 2, params)
     end
   end
